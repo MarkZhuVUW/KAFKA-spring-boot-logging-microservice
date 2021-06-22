@@ -1,3 +1,3 @@
-# KAFKA-spring-boot-logging-microservice
+# KAFKA-spring-boot-logging-as-a-microservice
 
 To be started....
