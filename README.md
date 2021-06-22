@@ -1,3 +1,3 @@
-# APLAKKA-spring-boot-logging-microservice
+# KAFKA-spring-boot-logging-microservice
 
 To be started....
