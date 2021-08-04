@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 public class AlertEventListener implements EventListener {
 
-  private static final Logger LOGGER = LogManager.getLogger(LogEventListener.class);
+  private static final Logger LOGGER = LogManager.getLogger(AlertEventListener.class);
 
   @Override
   public void onEventStart(final EventType type, final Long startTime, final String uniqueId) {

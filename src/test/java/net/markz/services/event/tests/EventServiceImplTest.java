@@ -9,8 +9,6 @@ import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)
-@RunWith(JUnitPlatform.class)
 class EventServiceImplTest {
 
   private EventServiceImpl eventServiceImpl;
