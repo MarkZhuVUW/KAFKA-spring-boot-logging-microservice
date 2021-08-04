@@ -1,6 +1,7 @@
 package net.markz.services.event;
 
 public interface EventService {
+
   Event.Builder startEvent(final EventType type);
 
   void endEvent(final Event.Builder eventBuilder);

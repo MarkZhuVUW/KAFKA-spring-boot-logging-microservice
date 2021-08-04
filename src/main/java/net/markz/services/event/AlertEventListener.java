@@ -1,9 +1,5 @@
 package net.markz.services.event;
 
-import net.markz.services.event.Event;
-import net.markz.services.event.EventListener;
-import net.markz.services.event.EventType;
-import net.markz.services.event.LogEventListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

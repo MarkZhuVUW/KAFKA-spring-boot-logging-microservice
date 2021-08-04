@@ -1,8 +1,6 @@
 package net.markz;
 
-import net.markz.services.event.EventService;
-import net.markz.services.event.EventServiceImpl;
-import net.markz.services.event.LogEventListener;
+import net.markz.services.event.*;
 import net.markz.services.fileread.FileReadingService;
 import net.markz.services.fileread.FileReadingServiceImpl;
 import org.apache.logging.log4j.LogManager;
@@ -17,15 +15,25 @@ public class Main {
   private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
   public static void main(String[] args) {
-    //    EventService eventService = new EventServiceImpl();
+    LOGGER.error("Application started running...");
+    EventService eventService = new EventServiceImpl();
+    var eventListener = new LogEventListener();
+    eventService.addEventListener(eventListener);
     FileReadingService fileReadingService = new FileReadingServiceImpl();
     try (Stream<String> stream = Files.lines(Paths.get("./src/test/scripts/numbers.txt"))) {
-      stream
-          .map(fileReadingService::readLineIntoConfig)
-          .map(fileReadingService::calculateETA)
-          .forEach(eta -> LOGGER.error(String.format("ETA: {%s} ", eta)));
+      stream.forEach(
+          lineStr -> {
+            var eventBuilder = eventService.startEvent(EventType.FILE_READ_LOG);
+            eventService.endEvent(eventBuilder);
+            var config = fileReadingService.readLineIntoConfig(lineStr);
+            fileReadingService.calculateETA(config);
+          });
+
     } catch (IOException e) {
-      e.printStackTrace();
+      LOGGER.error(e);
+    } finally {
+      eventService.removeEventListener(eventListener);
+      LOGGER.error("Application finished running");
     }
   }
 }
