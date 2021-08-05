@@ -15,6 +15,13 @@ public class Main {
   private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
   private static void triggerJITCompilations() {
+    var separator =
+        "----------------------------------------------------------------------------------------------------------------------------------------------------";
+    LOGGER.error(separator);
+    LOGGER.error(separator);
+    LOGGER.error(separator);
+    LOGGER.error(
+        "This is to trigger JIT compiler optimizations before we read and measure performance.");
     EventService eventService = new EventServiceImpl();
     var eventListener = new LogEventListener();
     eventService.addEventListener(eventListener);
@@ -25,20 +32,21 @@ public class Main {
     eventService.endEvent(eb);
     LOGGER.error(
         "The JIT compiler has compiled all classed needed so the subsequent time elapsed will be more accurate!");
-    var separator = "--------------------------------------------------------------------------";
+
     LOGGER.error(separator);
     LOGGER.error(separator);
     LOGGER.error(separator);
   }
 
   public static void main(String[] args) {
+    triggerJITCompilations();
+
     LOGGER.error("Application started running...");
     EventService eventService = new EventServiceImpl();
     var eventListener = new LogEventListener();
     eventService.addEventListener(eventListener);
     FileReadingService fileReadingService = new FileReadingServiceImpl();
     try (Stream<String> stream = Files.lines(Paths.get("./src/test/scripts/smallNumbers.txt"))) {
-      triggerJITCompilations();
 
       stream.forEach(
           lineStr -> {
