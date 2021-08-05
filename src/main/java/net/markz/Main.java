@@ -14,6 +14,23 @@ import java.util.stream.Stream;
 public class Main {
   private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
+  private static void triggerJITCompilations() {
+    EventService eventService = new EventServiceImpl();
+    var eventListener = new LogEventListener();
+    eventService.addEventListener(eventListener);
+    FileReadingService fileReadingService = new FileReadingServiceImpl();
+    var eb = eventService.startEvent(EventType.FILE_READ_LOG);
+    var c = fileReadingService.readLineIntoConfig("123 123 123");
+    fileReadingService.calculateETA(c);
+    eventService.endEvent(eb);
+    LOGGER.error(
+        "The JIT compiler has compiled all classed needed so the subsequent time elapsed will be more accurate!");
+    var separator = "--------------------------------------------------------------------------";
+    LOGGER.error(separator);
+    LOGGER.error(separator);
+    LOGGER.error(separator);
+  }
+
   public static void main(String[] args) {
     LOGGER.error("Application started running...");
     EventService eventService = new EventServiceImpl();
@@ -21,21 +38,16 @@ public class Main {
     eventService.addEventListener(eventListener);
     FileReadingService fileReadingService = new FileReadingServiceImpl();
     try (Stream<String> stream = Files.lines(Paths.get("./src/test/scripts/smallNumbers.txt"))) {
-      var totalNumOfSeconds =
-          stream
-              .map(
-                  lineStr -> {
-                    var eventBuilder = eventService.startEvent(EventType.FILE_READ_LOG);
-                    var config = fileReadingService.readLineIntoConfig(lineStr);
-                    var eta = fileReadingService.calculateETA(config);
-                    eventService.endEvent(eventBuilder);
-                    LOGGER.error("ETA calculation finished taking: {{}} seconds", eta);
+      triggerJITCompilations();
 
-                    return eta;
-                  })
-              .reduce(Long::sum);
-      LOGGER.error(
-          "Total number of seconds taken to run through the entire file: {{}} ", totalNumOfSeconds);
+      stream.forEach(
+          lineStr -> {
+            var eventBuilder = eventService.startEvent(EventType.FILE_READ_LOG);
+            var config = fileReadingService.readLineIntoConfig(lineStr);
+            var eta = fileReadingService.calculateETA(config);
+            eventService.endEvent(eventBuilder);
+            LOGGER.error("Remaining time before melt down: {{}} seconds", eta);
+          });
     } catch (IOException e) {
       LOGGER.error(e);
     } finally {

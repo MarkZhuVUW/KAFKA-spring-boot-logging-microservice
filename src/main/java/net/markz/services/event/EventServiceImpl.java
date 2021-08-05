@@ -15,7 +15,7 @@ public class EventServiceImpl implements EventService {
 
   @Override
   public Event.Builder startEvent(final EventType type) {
-    var startTime = System.currentTimeMillis();
+    var startTime = System.nanoTime();
     var uniqueId = UUID.randomUUID().toString();
     var eventBuilder =
         new Event.Builder().withType(type).withStartTime(startTime).withUniqueId(uniqueId);
@@ -25,6 +25,8 @@ public class EventServiceImpl implements EventService {
 
   @Override
   public void endEvent(final Event.Builder eventBuilder) {
+    var endTime = System.nanoTime();
+    eventBuilder.withEndTime(endTime);
     eventListeners.forEach(listener -> listener.onEventEnd(eventBuilder));
   }
 
