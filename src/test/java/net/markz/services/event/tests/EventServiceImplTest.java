@@ -1,4 +1,4 @@
-package net.markz.services.event.tests;
+package java.net.markz.services.event.tests;
 
 import net.markz.services.event.EventServiceImpl;
 import org.junit.jupiter.api.AfterEach;

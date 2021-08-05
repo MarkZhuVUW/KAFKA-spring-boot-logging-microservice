@@ -1,4 +1,4 @@
-package net.markz.services.event.tests;
+package java.net.markz.services.event.tests;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,19 +8,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LogEventListenerTest {
 
-    @BeforeEach
-    void setUp() {
-    }
+  @BeforeEach
+  void setUp() {}
 
-    @AfterEach
-    void tearDown() {
-    }
+  @AfterEach
+  void tearDown() {}
 
-    @Test
-    void onEventStart() {
-    }
+  @Test
+  void onEventStart() {}
 
-    @Test
-    void onEventEnd() {
-    }
+  @Test
+  void onEventEnd() {}
 }

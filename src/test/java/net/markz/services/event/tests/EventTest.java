@@ -1,4 +1,4 @@
-package net.markz.services.event.tests;
+package java.net.markz.services.event.tests;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,31 +8,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EventTest {
 
-    @BeforeEach
-    void setUp() {
-    }
+  @BeforeEach
+  void setUp() {}
 
-    @AfterEach
-    void tearDown() {
-    }
+  @AfterEach
+  void tearDown() {}
 
-    @Test
-    void getStartTime() {
-    }
+  @Test
+  void getStartTime() {}
 
-    @Test
-    void getEndTime() {
-    }
+  @Test
+  void getEndTime() {}
 
-    @Test
-    void getUniqueId() {
-    }
+  @Test
+  void getUniqueId() {}
 
-    @Test
-    void getType() {
-    }
+  @Test
+  void getType() {}
 
-    @Test
-    void testToString() {
-    }
+  @Test
+  void testToString() {}
 }

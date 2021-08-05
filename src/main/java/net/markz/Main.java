@@ -20,19 +20,25 @@ public class Main {
     var eventListener = new LogEventListener();
     eventService.addEventListener(eventListener);
     FileReadingService fileReadingService = new FileReadingServiceImpl();
-    try (Stream<String> stream = Files.lines(Paths.get("./src/test/scripts/numbers.txt"))) {
-      stream.forEach(
-          lineStr -> {
-            var eventBuilder = eventService.startEvent(EventType.FILE_READ_LOG);
-            eventService.endEvent(eventBuilder);
-            var config = fileReadingService.readLineIntoConfig(lineStr);
-            fileReadingService.calculateETA(config);
-          });
+    try (Stream<String> stream = Files.lines(Paths.get("./src/test/scripts/smallNumbers.txt"))) {
+      var totalNumOfSeconds =
+          stream
+              .map(
+                  lineStr -> {
+                    var eventBuilder = eventService.startEvent(EventType.FILE_READ_LOG);
+                    var config = fileReadingService.readLineIntoConfig(lineStr);
+                    var eta = fileReadingService.calculateETA(config);
+                    eventService.endEvent(eventBuilder);
+                    LOGGER.error("ETA calculation finished taking: {{}} seconds", eta);
 
+                    return eta;
+                  })
+              .reduce(Long::sum);
+      LOGGER.error(
+          "Total number of seconds taken to run through the entire file: {{}} ", totalNumOfSeconds);
     } catch (IOException e) {
       LOGGER.error(e);
     } finally {
-      eventService.removeEventListener(eventListener);
       LOGGER.error("Application finished running");
     }
   }
