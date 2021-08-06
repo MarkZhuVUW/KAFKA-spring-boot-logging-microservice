@@ -13,51 +13,56 @@ import java.util.stream.Stream;
 
 public class Main {
   private static final Logger LOGGER = LogManager.getLogger(Main.class);
+  private static final String SEPARATOR =
+      "--------------------------------------------------------------------------------------"
+          + "--------------------------------------------------------------";
 
-  private static void triggerJITCompilations() {
-    var separator =
-        "----------------------------------------------------------------------------------------------------------------------------------------------------";
-    LOGGER.error(separator);
-    LOGGER.error(separator);
-    LOGGER.error(separator);
-    LOGGER.error(
-        "This is to trigger JIT compiler optimizations before we read and measure performance.");
+  /**
+   * This is a simple method that forces JIT to compile all classes needed to run the program before
+   * they are used rather than compiling them "JUST-IN-TIME" so that we can get more accurate
+   * performance measurements of the ETA calculations. We can see how the first ETA calculation is
+   * so much slower than subsequent ones by looking at the log4j2 logs.
+   */
+  private static void fireUpJITCompilations() {
+    LOGGER.error(SEPARATOR);
+    LOGGER.error(SEPARATOR);
+    LOGGER.error(SEPARATOR);
     EventService eventService = new EventServiceImpl();
-    var eventListener = new LogEventListener();
-    eventService.addEventListener(eventListener);
+    var timeElapsedEventListener = new TimeElapsedEventListenerImpl();
+    eventService.addEventListener(timeElapsedEventListener);
     FileReadingService fileReadingService = new FileReadingServiceImpl();
-    var eb = eventService.startEvent(EventType.FILE_READ_LOG);
-    var c = fileReadingService.readLineIntoConfig("123 123 123");
-    fileReadingService.calculateETA(c);
-    eventService.endEvent(eb);
+    var eventBuilder = eventService.startEvent(EventType.FILE_READ_TIME_ELAPSED);
+    var config = fileReadingService.readLineIntoConfig("1 1");
+    fileReadingService.calculateETA(config);
+    eventService.endEvent(eventBuilder);
     LOGGER.error(
-        "The JIT compiler has compiled all classed needed so the subsequent time elapsed will be more accurate!");
-
-    LOGGER.error(separator);
-    LOGGER.error(separator);
-    LOGGER.error(separator);
+        "Now the JIT compiler has compiled all classed needed so that the subsequent elapsed times will be more accurate!");
+    LOGGER.error(SEPARATOR);
+    LOGGER.error(SEPARATOR);
+    LOGGER.error(SEPARATOR);
   }
 
   public static void main(String[] args) {
-    triggerJITCompilations();
+    // Force the poor Hotspot JIT against its will to compile all classes beforehand...
+    fireUpJITCompilations();
 
     LOGGER.error("Application started running...");
     EventService eventService = new EventServiceImpl();
-    var eventListener = new LogEventListener();
-    eventService.addEventListener(eventListener);
+    var timeElapsedEventListener = new TimeElapsedEventListenerImpl();
+    eventService.addEventListener(timeElapsedEventListener);
     FileReadingService fileReadingService = new FileReadingServiceImpl();
     try (Stream<String> stream = Files.lines(Paths.get("./src/test/scripts/smallNumbers.txt"))) {
-
       stream.forEach(
           lineStr -> {
-            var eventBuilder = eventService.startEvent(EventType.FILE_READ_LOG);
+            var eventBuilder = eventService.startEvent(EventType.FILE_READ_TIME_ELAPSED);
             var config = fileReadingService.readLineIntoConfig(lineStr);
             var eta = fileReadingService.calculateETA(config);
             eventService.endEvent(eventBuilder);
             LOGGER.error("Remaining time before melt down: {{}} seconds", eta);
           });
     } catch (IOException e) {
-      LOGGER.error(e);
+      LOGGER.error("Application stopped with IOException: {{}}", e.toString());
+
     } finally {
       LOGGER.error("Application finished running");
     }
