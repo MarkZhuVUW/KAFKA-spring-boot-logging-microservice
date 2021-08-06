@@ -2,12 +2,23 @@ package net.markz.services.event;
 
 import java.util.Objects;
 
+/**
+ * The {@link Event} class defines an event that happens in the application. The fields define some
+ * important attributes of an event.
+ */
 public final class Event {
+  /** The start time of an event. */
   private final long startTime;
+  /** The end time of an event. */
   private final long endTime;
+  /** The id that uniquely identifies the event. */
   private final String uniqueId;
+  /** The type of the event. */
   private final EventType type;
 
+  // Self documenting code here but for the sake of showcasing, private constructor forces users to
+  // create Event objects through the build method in case in the future the Event class becomes
+  // complicated and we need only partial data to create an Event object.
   private Event(Builder builder) {
     this.startTime = builder.startTime;
     this.endTime = builder.endTime;
@@ -41,18 +52,16 @@ public final class Event {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     var event = (Event) o;
-    // I use getters to get the fields here to in case the Event class
-    return getStartTime() == event.getStartTime()
-        && getEndTime() == event.getEndTime()
-        && getUniqueId().equals(event.getUniqueId())
-        && getType() == event.getType();
+    // The unique id is the only thing that differentiates event objects.
+    return getUniqueId().equals(event.getUniqueId());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getStartTime(), getEndTime(), getUniqueId(), getType());
+    return Objects.hash(getUniqueId());
   }
 
+  /** Users can only create an event object through the build method. */
   public static class Builder {
     private long startTime;
     private long endTime;

@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+/** The {@link EventServiceImpl} is an non-extensible implementation */
 public class EventServiceImpl implements EventService {
 
   private final Set<EventListener> eventListeners;
@@ -31,12 +32,16 @@ public class EventServiceImpl implements EventService {
   }
 
   @Override
-  public boolean addEventListener(final EventListener listener) {
-    return this.eventListeners.add(listener);
+  public void addEventListener(final EventListener listener) {
+    if (!this.eventListeners.add(listener)) {
+      throw new IllegalArgumentException("Listener cannot be attached");
+    }
   }
 
   @Override
-  public boolean removeEventListener(final EventListener listener) {
-    return this.eventListeners.remove(listener);
+  public void removeEventListener(final EventListener listener) {
+    if (!this.eventListeners.remove(listener)) {
+      throw new IllegalArgumentException("");
+    }
   }
 }

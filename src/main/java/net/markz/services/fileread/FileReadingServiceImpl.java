@@ -3,10 +3,10 @@ package net.markz.services.fileread;
 import java.util.Arrays;
 
 public class FileReadingServiceImpl implements FileReadingService {
-
   @Override
   public Configuration readLineIntoConfig(String lineStr) {
     var splitLine = lineStr.split(" ");
+
     var availableDiskSpace = Long.parseLong(splitLine[0]);
     var diskConsumptionSpeeds = Arrays.stream(splitLine).skip(1).map(Integer::parseInt).toList();
 
