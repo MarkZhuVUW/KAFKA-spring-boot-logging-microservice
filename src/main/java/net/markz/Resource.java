@@ -16,7 +16,8 @@ import java.util.stream.Stream;
 
 /**
  * A unit-testable "top" layer class of the application. All exceptions should be handled here
- * following the "throw early, catch late" practice.
+ * following the "throw early, catch late" practice. Service objects and other things are
+ * dependency-injected here, making it more testable.
  */
 public class Resource {
   private static final Logger LOGGER = LogManager.getLogger(Resource.class);
@@ -24,16 +25,11 @@ public class Resource {
       "--------------------------------------------------------------------------------------"
           + "--------------------------------------------------------------";
 
+  // Dependency injected services.
   private final EventService eventService;
   private final FileReadingService fileReadingService;
   private final Set<EventListener> listeners;
 
-  /**
-   * Dependency inject the services for unit-testability.
-   *
-   * @param eventService event service.
-   * @param fileReadingService file reading service.
-   */
   public Resource(
       EventService eventService,
       FileReadingService fileReadingService,
@@ -54,12 +50,11 @@ public class Resource {
     LOGGER.debug(SEPARATOR);
     LOGGER.debug("Start JIT optimizations.....");
     for (var i = 0; i < 10000; i++) {
-      calculateAllETAs(Paths.get("./src/test/scripts/optimizeJIT.txt"));
+      calculateAllETAs(Paths.get("./src/test/scripts/smallNumbers.txt"));
     }
     // Now the JIT compiler is nuclear-hot and it has compiled all classed needed o that the
     // subsequent elapsed times will be faster and more accurate!
-    // I am not doing anything here in order to keep JIT warm when we are doing performance
-    // logging.
+    // I am not doing anything here in order to keep JIT warm when we are doing the real thing.
 
   }
 

@@ -2,15 +2,36 @@ package net.markz.services.event;
 
 import java.util.*;
 
-/** The {@link EventServiceImpl} is an non-extensible implementation */
-public class EventServiceImpl implements EventService {
+/**
+ * The EventServiceImpl is a non-extensible implementation of {@link EventService}. It keeps a set
+ * of {@link EventListener} that perform actions according to the specs of the {@link EventListener}
+ * interface. Singleton pattern is used here as logically there should only be one EventServiceImpl
+ * object in the program.
+ */
+public final class EventServiceImpl implements EventService {
 
   private final Set<EventListener> eventListeners;
+  private static EventServiceImpl singleton;
 
-  public EventServiceImpl() {
+  // Encapsulate constructor here for the singleton pattern.
+  private EventServiceImpl() {
     this.eventListeners = new HashSet<>();
   }
 
+  // Singleton pattern. Lazy initialize an EventServiceImpl class here.
+  public static EventServiceImpl getInstance() {
+    if (singleton == null) {
+      singleton = new EventServiceImpl();
+    }
+    return singleton;
+  }
+
+  /**
+   * Executes the on event end listener callbacks with relevant information.
+   *
+   * @param type Event type.
+   * @return
+   */
   @Override
   public Event.Builder startEvent(final EventType type) {
 
@@ -22,6 +43,11 @@ public class EventServiceImpl implements EventService {
     return eventBuilder;
   }
 
+  /**
+   * Executes the on event end listener callbacks with relevant information.
+   *
+   * @param eventBuilder an event builder.
+   */
   @Override
   public void endEvent(final Event.Builder eventBuilder) {
     var endTime = System.nanoTime();

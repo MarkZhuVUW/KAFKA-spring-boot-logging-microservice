@@ -20,13 +20,15 @@ public class Main {
     var eventListeners = new HashSet<EventListener>();
     eventListeners.add(new TimeElapsedEventListener());
     var resource =
-        new Resource(new EventServiceImpl(), new FileReadingServiceImpl(), eventListeners);
+        new Resource(
+            EventServiceImpl.getInstance(), FileReadingServiceImpl.getInstance(), eventListeners);
 
-    // Force JIT optimizations to make the performance measurements for calculating the ETAs faster
-    // and more accurate. Obviously in production environment this program will probably be
-    // constantly running and there will be no need to warm up JIT.
+    // For demonstration purpose I am force JIT optimizations to make the performance measurements
+    // calculating the ETAs faster and more accurate. Obviously in production environment this
+    // program will probably be constantly running and there will be no need to warm up JIT
+    // beforehand.
     resource.nukeTheJIT();
-    // Run the calculations with optimal speed.
+    // Run the actual calculations with optimal speed.
     resource.calculateAllETAs(Paths.get("./src/test/scripts/smallNumbers.txt"));
   }
 }

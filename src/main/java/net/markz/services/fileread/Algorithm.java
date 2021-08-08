@@ -6,7 +6,7 @@ package net.markz.services.fileread;
  */
 public interface Algorithm {
   /**
-   * Do the actual algorithm, taking in a configuration object.
+   * Do the actual algorithm using the input configuration object.
    *
    * @param configuration a configuration object.
    * @return

@@ -3,7 +3,7 @@ package net.markz.services.event;
 import java.util.Objects;
 
 /**
- * The Event class defines an event that happens in the application. The fields define some *
+ * The Event class defines an event that happens in the application. The fields define some
  * important attributes of an event.
  */
 public final class Event {
@@ -16,14 +16,14 @@ public final class Event {
   /** The type of the event. */
   private final EventType type;
   /**
-   * The value of the event. Could be anything from integer, string, list. As long as it makes sense
-   * and represents this event.
+   * The value of the event. Could be anything from integer, string, list as long as it makes sense
+   * and helps add information about the event.
    */
   private final Object value;
 
   // Self documenting code here but for the sake of showcasing, private constructor forces users to
-  // create Event objects through the build method in case in the future the Event class becomes
-  // complicated and we need only partial data to create an Event object.
+  // create Event objects through the build method in the Builder class in case in the future the
+  // Event class becomes complicated and we need only partial data to create an Event object.
   private Event(Builder builder) {
     this.startTime = builder.startTime;
     this.endTime = builder.endTime;

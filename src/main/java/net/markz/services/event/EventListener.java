@@ -1,6 +1,9 @@
 package net.markz.services.event;
 
-/** An EventListener defines what happens when the start or end of an event is observe. */
+/**
+ * An EventListener defines what happens when the start or end of an event is observe. The Observer
+ * pattern is used here.
+ */
 public interface EventListener {
   /**
    * On event start observed.

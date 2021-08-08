@@ -1,6 +1,7 @@
 package net.markz.services.fileread;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /** A configuration, extracted from the test question. */
@@ -36,6 +37,19 @@ public class Configuration {
 
   public List<Integer> getDiskConsumptionSpeeds() {
     return diskConsumptionSpeeds;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Configuration that = (Configuration) o;
+    return getAvailableDiskSpace() == that.getAvailableDiskSpace() && getDiskConsumptionSpeeds().equals(that.getDiskConsumptionSpeeds());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getAvailableDiskSpace(), getDiskConsumptionSpeeds());
   }
 
   /**
