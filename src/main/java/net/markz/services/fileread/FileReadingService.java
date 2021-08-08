@@ -16,5 +16,5 @@ public interface FileReadingService {
    * @param configuration configuration object.
    * @return ETA in seconds.
    */
-  long calculateETA(Configuration configuration);
+  long calculateETA(Algorithm algo, Configuration configuration);
 }

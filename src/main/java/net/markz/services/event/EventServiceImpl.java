@@ -1,9 +1,6 @@
 package net.markz.services.event;
 
-import java.util.Collections;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
 /** The {@link EventServiceImpl} is an non-extensible implementation */
 public class EventServiceImpl implements EventService {
@@ -11,11 +8,12 @@ public class EventServiceImpl implements EventService {
   private final Set<EventListener> eventListeners;
 
   public EventServiceImpl() {
-    this.eventListeners = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    this.eventListeners = new HashSet<>();
   }
 
   @Override
   public Event.Builder startEvent(final EventType type) {
+
     var startTime = System.nanoTime();
     var uniqueId = UUID.randomUUID().toString();
     var eventBuilder =
@@ -41,7 +39,7 @@ public class EventServiceImpl implements EventService {
   @Override
   public void removeEventListener(final EventListener listener) {
     if (!this.eventListeners.remove(listener)) {
-      throw new IllegalArgumentException("");
+      throw new IllegalArgumentException("Listener cannot be removed");
     }
   }
 }

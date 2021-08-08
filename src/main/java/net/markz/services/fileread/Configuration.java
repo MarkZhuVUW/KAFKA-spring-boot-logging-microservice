@@ -7,20 +7,21 @@ import java.util.Set;
 public class Configuration {
 
   /**
-   * A long representing the available disk space in bytes. Design consideration: I have noticed
-   * that in the 'numbers.txt' file the 'X' could be pretty big. This drives my decision to use long
-   * to represent it because in java it can hold data as large as the computer RAM. If even that is
-   * not enough, my idea is that we can do some preprocessing on the text file so that instead of
-   * representing available disk space in bytes, we represent it in megabytes or even gigabytes.
+   * A long representing the available disk space in bytes. Design consideration: According to an
+   * old website: https://www.awsthinkbox.com/blogs/the-evolution-of-rendering. The render farm has
+   * three petabytes of local storage. Assuming now that there is 9000 petabytes local storage. 9000
+   * petabytes = 9e+18 in decimal, whereas a long in java is [-9.223372e+18, 9.223372e+18]. Even the
+   * positive part of a long can represent 9000 petabytes.
    */
   private final long availableDiskSpace;
+
   /**
-   * A List of Integer objects representing d(p_1) d(p_2) ... d(p_n) in the test question. Some
-   * design consideration: 1. I chose to use a List of Integer objects to represent time in seconds
-   * for processes to consume 1 byte of disk space because I assume a process can consume one byte
-   * pretty fast... 2. Although a list of Integer objects consume much more stack and heap memory
-   * than, for example, an array of primitive Integers, the java parallelStream api can be used on a
-   * List so that we can concurrently calculate the ETAs.
+   * A list of integers representing one byte of memory consumption time in seconds for the
+   * processes. Design consideration: According to the internet and the numbers.txt file, we are
+   * looking at roughly 400000 threads in the render farm. Let us make it larger to 1 million
+   * thread. A list of 1 million Integer objects can take up(depending on JVM implementation): 4
+   * megabytes or 8 megabytes memory for object reference + 4 megabytes primitive ints the objects
+   * wrap. The stack and heap memories should be well enough for us to handle this amount of data.
    */
   private final List<Integer> diskConsumptionSpeeds;
 
@@ -37,6 +38,10 @@ public class Configuration {
     return diskConsumptionSpeeds;
   }
 
+  /**
+   * I give the Configuration class a builder here in case more fields are added to it in the
+   * future.
+   */
   public static class Builder {
     private long availableDiskSpace;
     private List<Integer> diskConsumptionSpeeds;

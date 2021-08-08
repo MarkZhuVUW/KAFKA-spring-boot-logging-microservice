@@ -1,17 +1,17 @@
 package net.markz;
 
-import net.markz.services.event.EventService;
-import net.markz.services.event.EventServiceImpl;
-import net.markz.services.event.EventType;
-import net.markz.services.event.TimeElapsedEventListener;
+import net.markz.services.event.*;
 import net.markz.services.fileread.FileReadingService;
 import net.markz.services.fileread.FileReadingServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -24,79 +24,77 @@ public class Resource {
       "--------------------------------------------------------------------------------------"
           + "--------------------------------------------------------------";
 
-  EventService eventService;
-  FileReadingService fileReadingService;
+  private final EventService eventService;
+  private final FileReadingService fileReadingService;
+  private final Set<EventListener> listeners;
+
   /**
    * Dependency inject the services for unit-testability.
    *
    * @param eventService event service.
    * @param fileReadingService file reading service.
    */
-  public Resource(EventService eventService, FileReadingService fileReadingService) {
+  public Resource(
+      EventService eventService,
+      FileReadingService fileReadingService,
+      Set<EventListener> eventListeners) {
     this.eventService = eventService;
+    this.listeners = eventListeners;
     this.fileReadingService = fileReadingService;
   }
 
   /**
    * A simple method that forces JIT to: 1. Compile all classes needed to run the program into
-   * machine instructions before they are used rather than compiling them "JUST-IN-TIME" 2. Force
-   * the "hottest" Hotspot optimization on all relevant stack and heap memory.
+   * machine instructions before they are used rather than compiling them "JUST-IN-TIME" 2. the
+   * "hottest" Hotspot optimization on all relevant stack and heap memory.
    */
   public void nukeTheJIT() {
     LOGGER.debug(SEPARATOR);
     LOGGER.debug(SEPARATOR);
     LOGGER.debug(SEPARATOR);
-    for (var i = 0; i < 1; i++) {
-      var es = new EventServiceImpl();
-      var timeElapsedEventListener = new TimeElapsedEventListener();
-      es.addEventListener(timeElapsedEventListener);
-      var fs = new FileReadingServiceImpl();
-      var eventBuilder = es.startEvent(EventType.FILE_READ_TIME_ELAPSED);
-      var config = fs.readLineIntoConfig("1 1");
-      fs.calculateETA(config);
-      es.endEvent(eventBuilder);
+    LOGGER.debug("Start JIT optimizations.....");
+    for (var i = 0; i < 10000; i++) {
+      calculateAllETAs(Paths.get("./src/test/scripts/optimizeJIT.txt"));
     }
-    LOGGER.debug(
-        "Now the JIT compiler has compiled all classed needed so that the subsequent elapsed times will be more accurate!");
-    LOGGER.debug(SEPARATOR);
-    LOGGER.debug(SEPARATOR);
-    LOGGER.debug(SEPARATOR);
+    // Now the JIT compiler is nuclear-hot and it has compiled all classed needed o that the
+    // subsequent elapsed times will be faster and more accurate!
+    // I am not doing anything here in order to keep JIT warm when we are doing performance
+    // logging.
+
   }
 
   /**
    * Calculates ETA before OOM for each line read from "numbers.txt" with a good level of exception
    * handling, general logging and time elapsed logging.
    */
-  public void calculateAllETAs() {
+  public void calculateAllETAs(Path path) {
 
-    LOGGER.info("Application started running...");
-
-    var timeElapsedEventListener = new TimeElapsedEventListener();
-    this.eventService.addEventListener(timeElapsedEventListener);
-    try (Stream<String> stream = Files.lines(Paths.get("./src/test/scripts/smallNumbers.txt"))) {
+    try (Stream<String> stream = Files.lines(path)) {
+      listeners.forEach(eventService::addEventListener);
       stream.forEach(
           lineStr -> {
             var eventBuilder = eventService.startEvent(EventType.FILE_READ_TIME_ELAPSED);
             var config = fileReadingService.readLineIntoConfig(lineStr);
-            var eta = fileReadingService.calculateETA(config);
+            var eta = fileReadingService.calculateETA(AlgorithmResource.bruteforce, config);
+            eventBuilder.withValue(eta);
             eventService.endEvent(eventBuilder);
-            LOGGER.info("Remaining time before OOP: {{}} seconds", eta);
           });
       // IOException normally should not stop program as it gives user horrible times.
       // IllegalArgumentException is due to a listener being not properly attached or removed and it
       // is not serious enough to cause a program exit.
       // All other exceptions should be logged and force a program exit.
     } catch (IOException | IllegalArgumentException e) {
-      LOGGER.warn("Stack trace: {{}} Application stopped with {{}}", e, e.getCause().toString());
+      LOGGER.warn("Exception happened: {{}}", e.toString());
+      e.printStackTrace();
     } catch (Exception e) {
-      LOGGER.error("Stack trace: {{}} Application stopped with {{}}", e, e.getCause().toString());
+      LOGGER.error("Application stopped with: {{}}", e.toString());
       throw e;
     } finally {
       // In larger applications, the service objects are used everywhere and if we do not cleanup
       // the side effects in time, the objects(in this case the timeElapsedEventListener object)
-      // will never be garbage-collected and eventually an OutOfMemoryException will occur if such
-      // objects overflow the heap!
-      eventService.removeEventListener(timeElapsedEventListener);
+      // will never be garbage-collected and eventually an out of memory Exception will occur if
+      // such objects overflow the heap!
+      listeners.forEach(eventService::removeEventListener);
     }
   }
 }

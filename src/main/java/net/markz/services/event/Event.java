@@ -3,18 +3,23 @@ package net.markz.services.event;
 import java.util.Objects;
 
 /**
- * The {@link Event} class defines an event that happens in the application. The fields define some
+ * The Event class defines an event that happens in the application. The fields define some *
  * important attributes of an event.
  */
 public final class Event {
   /** The start time of an event. */
   private final long startTime;
-  /** The end time of an event. */
-  private final long endTime;
+  /** The end time of an event. May not exist for certain event types. */
+  private final Long endTime;
   /** The id that uniquely identifies the event. */
   private final String uniqueId;
   /** The type of the event. */
   private final EventType type;
+  /**
+   * The value of the event. Could be anything from integer, string, list. As long as it makes sense
+   * and represents this event.
+   */
+  private final Object value;
 
   // Self documenting code here but for the sake of showcasing, private constructor forces users to
   // create Event objects through the build method in case in the future the Event class becomes
@@ -24,6 +29,7 @@ public final class Event {
     this.endTime = builder.endTime;
     this.type = builder.type;
     this.uniqueId = builder.uniqueId;
+    this.value = builder.value;
   }
 
   public long getStartTime() {
@@ -42,17 +48,15 @@ public final class Event {
     return type;
   }
 
-  public String toString() {
-    return String.format(
-        "Event: {%s} lasted {%s} milliseconds", this.type.toString(), this.startTime);
+  public Object getValue() {
+    return value;
   }
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    var event = (Event) o;
-    // The unique id is the only thing that differentiates event objects.
+    Event event = (Event) o;
     return getUniqueId().equals(event.getUniqueId());
   }
 
@@ -64,22 +68,31 @@ public final class Event {
   /** Users can only create an event object through the build method. */
   public static class Builder {
     private long startTime;
-    private long endTime;
+    private Long endTime;
     private String uniqueId;
     private EventType type;
+    private Object value;
 
     public Builder withStartTime(long startTime) {
       this.startTime = startTime;
       return this;
     }
 
-    public Builder withEndTime(long endTime) {
+    public Builder withEndTime(Long endTime) {
       this.endTime = endTime;
       return this;
     }
 
     public Builder withUniqueId(String uniqueId) {
+      if (uniqueId == null) {
+        throw new IllegalArgumentException("Event type cannot be null");
+      }
       this.uniqueId = uniqueId;
+      return this;
+    }
+
+    public Builder withValue(Object value) {
+      this.value = value;
       return this;
     }
 
@@ -92,6 +105,10 @@ public final class Event {
     }
 
     public Event build() {
+      if (uniqueId == null || type == null)
+        throw new IllegalArgumentException(
+            String.format(
+                "An event must have uniqueId and type. Received: {%s} {%s}", uniqueId, type));
       return new Event(this);
     }
   }
