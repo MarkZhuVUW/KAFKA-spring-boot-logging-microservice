@@ -68,7 +68,7 @@ public final class FileReadingServiceImpl implements FileReadingService {
 
     long eta = algo.doAlgorithm(configuration);
     LOGGER.info(
-        "Finished calculating ETAs for configuration with available disk space: {{}} bytes and {{}} processes. Resuting ETA: {{}}",
+        "Finished calculating ETAs for configuration with available disk space: {{}} bytes and {{}} processes. Resuting ETA: {{}} seconds",
         configuration.getAvailableDiskSpace(),
         configuration.getDiskConsumptionSpeeds().size(),
         eta);

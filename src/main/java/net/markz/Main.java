@@ -28,11 +28,17 @@ public class Main {
     // calculating the ETAs faster and more accurate. Obviously in production environment this
     // program will probably be constantly running and there will be no need to warm up JIT
     // beforehand.
-    //    resource.nukeTheJIT(
-    //        Paths.get("./src/test/scripts/smallNumbers.txt"),
-    // AlgorithmResource.SMARTER_OR_NOT_ALGO);
-    // Run the actual calculations with optimal speed.
+    resource.nukeTheJIT(
+        Paths.get("./src/test/scripts/smallNumbers.txt"), AlgorithmResource.BRUTE_FORCE);
+    // Run the actual calculations with optimal speed. The brute force approach works only for small
+    // configurations...
     resource.calculateAllETAs(
-        Paths.get("./src/test/scripts/smallNumbers.txt"), AlgorithmResource.SMARTER_OR_NOT_ALGO);
+        Paths.get("./src/test/scripts/smallNumbers.txt"), AlgorithmResource.BRUTE_FORCE);
+
+    // This is not working but I have included here for reference.
+    //    resource.nukeTheJIT(
+    //        Paths.get("./src/test/scripts/numbers.txt"), AlgorithmResource.SMARTER_OR_NOT_ALGO);
+    //    resource.calculateAllETAs(
+    //        Paths.get("./src/test/scripts/numbers.txt"), AlgorithmResource.SMARTER_OR_NOT_ALGO);
   }
 }

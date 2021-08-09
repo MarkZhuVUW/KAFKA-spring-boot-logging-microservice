@@ -2,9 +2,7 @@ package net.markz;
 
 import net.markz.services.fileread.Algorithm;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 /** Keeps track of a few ways to calculate ETA for out of memory of a configuration. */
 public class AlgorithmResource {
@@ -49,12 +47,12 @@ public class AlgorithmResource {
         long availableDiskSpace = configuration.getAvailableDiskSpace();
         int length = sortedConsumptionSpeeds.size();
 
-        int[] dynamicConsumptionSpeeds = new int[length];
+        var dynamicConsumptionSpeeds = new int[length];
         for (var i = 0; i < length; i++) {
           dynamicConsumptionSpeeds[i] = sortedConsumptionSpeeds.get(i);
         }
 
-        //        int[] consumptionSpeedDiffs = new int[length];
+        //        int[] consumptionSpeedDiff = new int[length];
         //        for (var i = 0; i <length; i++) {
         //
         //        }
@@ -62,13 +60,13 @@ public class AlgorithmResource {
         long round = 1;
         while (true) {
           for (var i = 0; i < length; i++) {
-            int consumptionSpeedDiffs =
+            int consumptionSpeedDiff =
                 i == 0
                     ? dynamicConsumptionSpeeds[i]
                     : dynamicConsumptionSpeeds[i] - dynamicConsumptionSpeeds[i - 1];
             for (var j = 0; j < i; j++) {
-              while (consumptionSpeedDiffs > 0) {
-                consumptionSpeedDiffs--;
+              while (consumptionSpeedDiff > 0) {
+                consumptionSpeedDiff--;
                 dynamicConsumptionSpeeds[j]--;
                 eta++;
                 if (dynamicConsumptionSpeeds[j] == 0) {
@@ -77,9 +75,9 @@ public class AlgorithmResource {
                   if (availableDiskSpace == 0) return eta;
                 }
               }
-              //              eta -= consumptionSpeedDiffs;
+              // eta -= consumptionSpeedDiff;
             }
-            eta += consumptionSpeedDiffs;
+            eta += consumptionSpeedDiff;
             availableDiskSpace--;
             round++;
             if (availableDiskSpace == 0) return eta;

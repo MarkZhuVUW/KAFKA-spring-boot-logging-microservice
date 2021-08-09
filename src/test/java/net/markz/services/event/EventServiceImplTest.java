@@ -6,29 +6,24 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// TODO no time to finish!
 class EventServiceImplTest {
 
-    @BeforeEach
-    void setUp() {
-    }
+  @BeforeEach
+  void setUp() {}
 
-    @AfterEach
-    void tearDown() {
-    }
+  @AfterEach
+  void tearDown() {}
 
-    @Test
-    void startEvent() {
-    }
+  @Test
+  void startEvent() {}
 
-    @Test
-    void endEvent() {
-    }
+  @Test
+  void endEvent() {}
 
-    @Test
-    void addEventListener() {
-    }
+  @Test
+  void addEventListener() {}
 
-    @Test
-    void removeEventListener() {
-    }
+  @Test
+  void removeEventListener() {}
 }
