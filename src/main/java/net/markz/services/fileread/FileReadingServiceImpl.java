@@ -14,10 +14,14 @@ public final class FileReadingServiceImpl implements FileReadingService {
   private static final Logger LOGGER = LogManager.getLogger(FileReadingServiceImpl.class);
   private static FileReadingServiceImpl singleton;
 
-  // Encapsulate constructor here for the singleton pattern.
+  /** Encapsulate constructor here for the singleton pattern. */
   private FileReadingServiceImpl() {}
 
-  // Singleton pattern. Lazy initialize a FileReadingServiceImpl class here.
+  /**
+   * Singleton pattern. Lazy initialize a {@link FileReadingServiceImpl} object here.
+   *
+   * @return the singleton {@link FileReadingServiceImpl} object.
+   */
   public static FileReadingServiceImpl getInstance() {
     if (singleton == null) {
       singleton = new FileReadingServiceImpl();
@@ -25,6 +29,12 @@ public final class FileReadingServiceImpl implements FileReadingService {
     return singleton;
   }
 
+  /**
+   * Reads a line string into a configuration object.
+   *
+   * @param lineStr line string.
+   * @return a configuration object.
+   */
   @Override
   public Configuration readLineIntoConfig(String lineStr) {
     LOGGER.info("Started parsing line into a configuration object.");
@@ -41,6 +51,14 @@ public final class FileReadingServiceImpl implements FileReadingService {
     return config;
   }
 
+  /**
+   * Calculates the ETA before out of memory for the input configuration. The control of the
+   * calculation algorithm is inverted.
+   *
+   * @param algo A functional interface that defines how the calculation is done.
+   * @param configuration configuration object.
+   * @return
+   */
   @Override
   public long calculateETA(Algorithm algo, Configuration configuration) {
     LOGGER.info(

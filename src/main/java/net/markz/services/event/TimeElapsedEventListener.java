@@ -42,5 +42,20 @@ public class TimeElapsedEventListener implements EventListener {
         duration);
   }
 
+  /**
+   * I don't want to have duplicate Listener objects here so all listeners who are instance of
+   * TimeElapsedEventListener are considered equal.
+   *
+   * @param o input object.
+   * @return whether input object and this are equal.
+   */
+  @Override
+  public boolean equals(Object o) {
+    return o instanceof TimeElapsedEventListener;
+  }
 
+  @Override
+  public int hashCode() {
+    return TimeElapsedEventListener.class.hashCode();
+  }
 }

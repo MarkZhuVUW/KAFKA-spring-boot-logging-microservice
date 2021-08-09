@@ -3,6 +3,7 @@ package net.markz;
 import net.markz.services.event.EventListener;
 import net.markz.services.event.EventServiceImpl;
 import net.markz.services.event.TimeElapsedEventListener;
+import net.markz.services.fileread.Algorithm;
 import net.markz.services.fileread.FileReadingServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,8 +28,11 @@ public class Main {
     // calculating the ETAs faster and more accurate. Obviously in production environment this
     // program will probably be constantly running and there will be no need to warm up JIT
     // beforehand.
-    resource.nukeTheJIT();
+    //    resource.nukeTheJIT(
+    //        Paths.get("./src/test/scripts/smallNumbers.txt"),
+    // AlgorithmResource.SMARTER_OR_NOT_ALGO);
     // Run the actual calculations with optimal speed.
-    resource.calculateAllETAs(Paths.get("./src/test/scripts/smallNumbers.txt"));
+    resource.calculateAllETAs(
+        Paths.get("./src/test/scripts/smallNumbers.txt"), AlgorithmResource.SMARTER_OR_NOT_ALGO);
   }
 }

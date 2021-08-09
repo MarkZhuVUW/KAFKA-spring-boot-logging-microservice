@@ -13,12 +13,16 @@ public final class EventServiceImpl implements EventService {
   private final Set<EventListener> eventListeners;
   private static EventServiceImpl singleton;
 
-  // Encapsulate constructor here for the singleton pattern.
+  /** Encapsulate constructor here for the singleton pattern. */
   private EventServiceImpl() {
     this.eventListeners = new HashSet<>();
   }
 
-  // Singleton pattern. Lazy initialize an EventServiceImpl class here.
+  /**
+   * Singleton pattern. Lazy initialize an {@link EventServiceImpl} object here.
+   *
+   * @return the {@link EventServiceImpl} singleton object.
+   */
   public static EventServiceImpl getInstance() {
     if (singleton == null) {
       singleton = new EventServiceImpl();
@@ -30,7 +34,7 @@ public final class EventServiceImpl implements EventService {
    * Executes the on event end listener callbacks with relevant information.
    *
    * @param type Event type.
-   * @return
+   * @return an event builder.
    */
   @Override
   public Event.Builder startEvent(final EventType type) {

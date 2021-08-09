@@ -3,7 +3,7 @@ package net.markz.services.event;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-// TODO
+// TODO Alert when
 public class AlertEventListener implements EventListener {
 
   private static final Logger LOGGER = LogManager.getLogger(AlertEventListener.class);

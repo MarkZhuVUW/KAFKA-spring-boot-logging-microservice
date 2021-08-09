@@ -1,6 +1,7 @@
 package net.markz;
 
 import net.markz.services.event.*;
+import net.markz.services.fileread.Algorithm;
 import net.markz.services.fileread.FileReadingService;
 import net.markz.services.fileread.FileReadingServiceImpl;
 import org.apache.logging.log4j.LogManager;
@@ -44,13 +45,13 @@ public class Resource {
    * machine instructions before they are used rather than compiling them "JUST-IN-TIME" 2. the
    * "hottest" Hotspot optimization on all relevant stack and heap memory.
    */
-  public void nukeTheJIT() {
+  public void nukeTheJIT(Path path, Algorithm algorithm) {
     LOGGER.debug(SEPARATOR);
     LOGGER.debug(SEPARATOR);
     LOGGER.debug(SEPARATOR);
     LOGGER.debug("Start JIT optimizations.....");
     for (var i = 0; i < 10000; i++) {
-      calculateAllETAs(Paths.get("./src/test/scripts/smallNumbers.txt"));
+      calculateAllETAs(path, algorithm);
     }
     // Now the JIT compiler is nuclear-hot and it has compiled all classed needed o that the
     // subsequent elapsed times will be faster and more accurate!
@@ -62,17 +63,18 @@ public class Resource {
    * Calculates ETA before OOM for each line read from "numbers.txt" with a good level of exception
    * handling, general logging and time elapsed logging.
    */
-  public void calculateAllETAs(Path path) {
+  public void calculateAllETAs(Path path, Algorithm algorithm) {
 
     try (Stream<String> stream = Files.lines(path)) {
-      listeners.forEach(eventService::addEventListener);
+      this.listeners.forEach(eventService::addEventListener);
+
       stream.forEach(
           lineStr -> {
-            var eventBuilder = eventService.startEvent(EventType.FILE_READ_TIME_ELAPSED);
-            var config = fileReadingService.readLineIntoConfig(lineStr);
-            var eta = fileReadingService.calculateETA(AlgorithmResource.bruteforce, config);
+            var eventBuilder = this.eventService.startEvent(EventType.FILE_READ_TIME_ELAPSED);
+            var config = this.fileReadingService.readLineIntoConfig(lineStr);
+            var eta = this.fileReadingService.calculateETA(algorithm, config);
             eventBuilder.withValue(eta);
-            eventService.endEvent(eventBuilder);
+            this.eventService.endEvent(eventBuilder);
           });
       // IOException normally should not stop program as it gives user horrible times.
       // IllegalArgumentException is due to a listener being not properly attached or removed and it
@@ -89,7 +91,7 @@ public class Resource {
       // the side effects in time, the objects(in this case the timeElapsedEventListener object)
       // will never be garbage-collected and eventually an out of memory Exception will occur if
       // such objects overflow the heap!
-      listeners.forEach(eventService::removeEventListener);
+      this.listeners.forEach(this.eventService::removeEventListener);
     }
   }
 }
