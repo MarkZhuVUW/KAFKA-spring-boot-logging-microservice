@@ -33,12 +33,12 @@ public class TimeElapsedEventListener implements EventListener {
     var event = eventBuilder.build();
     long duration = event.getEndTime() - event.getStartTime();
     if (event.getValue() != null && event.getType() == EventType.FILE_READ_TIME_ELAPSED) {
-      LOGGER.info("Remaining time before OOP: {{}} seconds", event.getValue());
+      LOGGER.info("Remaining time before OOM: {{}} seconds", event.getValue());
     }
     LOGGER.info(
         "Event: {{}} with unique Id {{}} ended. Duration: {{}} nanoseconds.",
+        event.getType(),
         event.getUniqueId(),
-        event.getEndTime(),
         duration);
   }
 

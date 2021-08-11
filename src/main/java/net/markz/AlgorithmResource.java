@@ -15,7 +15,7 @@ public class AlgorithmResource {
    * and checks for all disk consumption speeds whether any of them can be divided by the current
    * eta. If they can we decrement availableDiskSpace and if availableDiskSpace equals 0 we get the
    * ETA in seconds... This becomes extremely slow even at just the fourth line of the
-   * numbers.txt....but I it generates the correct output given enough time..
+   * numbers.txt....but it generates the correct output given enough time..
    */
   public static final Algorithm BRUTE_FORCE =
       configuration -> {
@@ -60,13 +60,11 @@ public class AlgorithmResource {
         long round = 1;
         while (true) {
           for (var i = 0; i < length; i++) {
-            int consumptionSpeedDiff =
-                i == 0
-                    ? dynamicConsumptionSpeeds[i]
-                    : dynamicConsumptionSpeeds[i] - dynamicConsumptionSpeeds[i - 1];
+            int consumptionSpeedDiff = dynamicConsumptionSpeeds[i];
             for (var j = 0; j < i; j++) {
-              while (consumptionSpeedDiff > 0) {
-                consumptionSpeedDiff--;
+              int temp = dynamicConsumptionSpeeds[i] - dynamicConsumptionSpeeds[i - 1];
+              while (temp > 0) {
+                temp--;
                 dynamicConsumptionSpeeds[j]--;
                 eta++;
                 if (dynamicConsumptionSpeeds[j] == 0) {
@@ -75,6 +73,8 @@ public class AlgorithmResource {
                   if (availableDiskSpace == 0) return eta;
                 }
               }
+              consumptionSpeedDiff = temp;
+
               // eta -= consumptionSpeedDiff;
             }
             eta += consumptionSpeedDiff;

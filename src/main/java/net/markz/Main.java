@@ -24,7 +24,7 @@ public class Main {
         new Resource(
             EventServiceImpl.getInstance(), FileReadingServiceImpl.getInstance(), eventListeners);
 
-    // For demonstration purpose I am force JIT optimizations to make the performance measurements
+    // For demonstration purpose I am forcing JIT optimizations to make the performance measurements
     // calculating the ETAs faster and more accurate. Obviously in production environment this
     // program will probably be constantly running and there will be no need to warm up JIT
     // beforehand.

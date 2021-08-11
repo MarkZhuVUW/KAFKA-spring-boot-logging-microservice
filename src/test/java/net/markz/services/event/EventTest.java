@@ -47,23 +47,17 @@ class EventTest {
 
   @Test
   void testEqualsFalse() {
-    assertEquals(
-        false,
-        event.equals(
-            new Event.Builder()
-                .withUniqueId("1")
-                .withType(EventType.FILE_READ_TIME_ELAPSED)
-                .build()));
+    assertNotEquals(event, new Event.Builder()
+            .withUniqueId("1")
+            .withType(EventType.FILE_READ_TIME_ELAPSED)
+            .build());
   }
 
   @Test
   void testEqualsTrue() {
-    assertEquals(
-        true,
-        event.equals(
-            new Event.Builder()
-                .withUniqueId("123")
-                .withType(EventType.FILE_READ_TIME_ELAPSED)
-                .build()));
+    assertEquals(event, new Event.Builder()
+            .withUniqueId("123")
+            .withType(EventType.FILE_READ_TIME_ELAPSED)
+            .build());
   }
 }
