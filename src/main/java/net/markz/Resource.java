@@ -53,6 +53,7 @@ public class Resource {
     for (var i = 0; i < 10000; i++) {
       calculateAllETAs(path, algorithm);
     }
+
     // Now the JIT compiler is nuclear-hot and it has compiled all classed needed so that the
     // subsequent elapsed times will be faster and more accurate!
     // I am not doing anything here in order to keep JIT warm when we are doing the real thing.

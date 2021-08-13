@@ -39,13 +39,12 @@ public final class FileReadingServiceImpl implements FileReadingService {
   public Configuration readLineIntoConfig(String lineStr) {
     LOGGER.info("Started parsing line into a configuration object.");
     var splitLine = lineStr.split(" ");
-
     var availableDiskSpace = Long.parseLong(splitLine[0]);
-    var sortedConsumptionSpeeds = Arrays.stream(splitLine).skip(1).map(Integer::parseInt).toList();
+    var consumptionSpeeds = Arrays.stream(splitLine).skip(1).map(Integer::parseInt).toList();
     Configuration config =
         new Configuration.Builder()
             .withAvailableDiskSpace(availableDiskSpace)
-            .withDiskConsumptionSpeeds(sortedConsumptionSpeeds)
+            .withDiskConsumptionSpeeds(consumptionSpeeds)
             .build();
     LOGGER.info("Finished parsing line into a configuration object.");
     return config;
