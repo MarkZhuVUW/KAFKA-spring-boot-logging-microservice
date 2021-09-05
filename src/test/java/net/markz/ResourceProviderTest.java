@@ -21,7 +21,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 // TODO no time!
 @RunWith(MockitoJUnitRunner.class)
-class ResourceTest {
+class ResourceProviderTest {
 
   @Mock private EventService eventService;
   @Mock private FileReadingService fileReadingService;

@@ -5,16 +5,12 @@ import net.markz.services.fileread.Configuration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class AlgorithmResourceTest {
+class AlgorithmsTest {
 
   @BeforeEach
   void setUp() {}
@@ -33,7 +29,7 @@ class AlgorithmResourceTest {
             .withAvailableDiskSpace(4L)
             .withDiskConsumptionSpeeds(speeds)
             .build();
-    assertEquals(9, AlgorithmResource.BRUTE_FORCE.doAlgorithm(config));
+    assertEquals(9, Algorithms.BRUTE_FORCE.doAlgorithm(config));
   }
 
   @Test
@@ -49,7 +45,7 @@ class AlgorithmResourceTest {
             .withAvailableDiskSpace(15L)
             .withDiskConsumptionSpeeds(speeds)
             .build();
-    assertEquals(12, AlgorithmResource.BRUTE_FORCE.doAlgorithm(config));
+    assertEquals(12, Algorithms.BRUTE_FORCE.doAlgorithm(config));
   }
 
   @Test
@@ -65,6 +61,6 @@ class AlgorithmResourceTest {
             .withAvailableDiskSpace(16L)
             .withDiskConsumptionSpeeds(speeds)
             .build();
-    assertEquals(14, AlgorithmResource.BRUTE_FORCE.doAlgorithm(config));
+    assertEquals(14, Algorithms.BRUTE_FORCE.doAlgorithm(config));
   }
 }

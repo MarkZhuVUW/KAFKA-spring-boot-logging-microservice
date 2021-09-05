@@ -1,19 +1,11 @@
 package net.markz.services.fileread;
 
-import net.markz.AlgorithmResource;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 // TODO no time!
 @RunWith(MockitoJUnitRunner.class)
 class FileReadingServiceTest {

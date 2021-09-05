@@ -3,15 +3,12 @@ package net.markz;
 import net.markz.services.event.*;
 import net.markz.services.fileread.Algorithm;
 import net.markz.services.fileread.FileReadingService;
-import net.markz.services.fileread.FileReadingServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -20,8 +17,8 @@ import java.util.stream.Stream;
  * following the "throw early, catch late" practice. Service objects and other things are
  * dependency-injected here, making it more testable.
  */
-public class Resource {
-  private static final Logger LOGGER = LogManager.getLogger(Resource.class);
+public class ResourceProvider {
+  private static final Logger LOGGER = LogManager.getLogger(ResourceProvider.class);
   private static final String SEPARATOR =
       "--------------------------------------------------------------------------------------"
           + "--------------------------------------------------------------";
@@ -31,7 +28,7 @@ public class Resource {
   private final FileReadingService fileReadingService;
   private final Set<EventListener> listeners;
 
-  public Resource(
+  public ResourceProvider(
       EventService eventService,
       FileReadingService fileReadingService,
       Set<EventListener> eventListeners) {

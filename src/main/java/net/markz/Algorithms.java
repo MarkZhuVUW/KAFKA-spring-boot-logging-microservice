@@ -5,9 +5,9 @@ import net.markz.services.fileread.Algorithm;
 import java.util.List;
 
 /** Keeps track of a few ways to calculate ETA for out of memory of a configuration. */
-public class AlgorithmResource {
+public class Algorithms {
   // hide constructor as we are only using the static functions from outside.
-  private AlgorithmResource() {}
+  private Algorithms() {}
 
   /**
    * I call it the brute-force way of calculating ETAs. This essentially keeps incrementing the eta

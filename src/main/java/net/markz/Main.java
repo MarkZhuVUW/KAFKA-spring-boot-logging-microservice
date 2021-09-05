@@ -20,7 +20,7 @@ public class Main {
     var eventListeners = new HashSet<EventListener>();
     eventListeners.add(new TimeElapsedEventListener());
     var resource =
-        new Resource(
+        new ResourceProvider(
             EventServiceImpl.getInstance(), FileReadingServiceImpl.getInstance(), eventListeners);
 
     // For demonstration purpose I am forcing JIT optimizations to make the performance measurements
@@ -28,11 +28,11 @@ public class Main {
     // program will probably be constantly running and there will be no need to warm up JIT
     // beforehand.
     resource.nukeTheJIT(
-        Paths.get("./src/test/scripts/smallNumbers.txt"), AlgorithmResource.BRUTE_FORCE);
+        Paths.get("./src/test/scripts/smallNumbers.txt"), Algorithms.BRUTE_FORCE);
     // Run the actual calculations with optimal speed. The brute force approach works only for small
     // configurations...
     resource.calculateAllETAs(
-        Paths.get("./src/test/scripts/smallNumbers.txt"), AlgorithmResource.BRUTE_FORCE);
+        Paths.get("./src/test/scripts/smallNumbers.txt"), Algorithms.BRUTE_FORCE);
 
     // This is not working but I have included here for reference.
     //    resource.nukeTheJIT(
